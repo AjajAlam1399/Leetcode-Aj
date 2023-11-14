@@ -35,15 +35,9 @@ public:
             if(vec.size()>=3){
                 string str="";
                 str.push_back(ch);str.push_back(ch);str.push_back(ch);
-                // st+=ch+ch+ch;
-                // cout<<str<<endl;
                 set.insert(str);
             }
         }
-        // for(auto st:set){
-        //     cout<<st<<endl;
-        // }
-
         return set.size();
     }
 };
