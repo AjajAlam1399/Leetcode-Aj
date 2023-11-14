@@ -2,42 +2,38 @@ class Solution {
 public:
     int countPalindromicSubsequence(string s) {
         int n=s.size();
-        unordered_map<char,vector<int>>map;
-        unordered_set<string>set;
+        vector<int>first(26,-1);
+        vector<int>last(26,-1);
 
-        for(int i=0;i<n;i++){
-            map[s[i]].push_back(i);
-        }
-
-
-        for(auto it:map){
-            char ch=it.first;
-            // cout<<ch<<endl;
-            vector<int>vec=it.second;
-            if(vec.size()>=2){
-                for(int i=1;i<vec.size();i++){
-                    int sind=vec[i-1]+1;
-                    int eind=vec[i]-1;
-                    while(sind<=eind){
-                        string str="";
-                        str.push_back(ch);
-                        str.push_back(s[sind]);
-                        str.push_back(ch);
-                        // str+=ch+s[sind]+ch;
-                        if(set.find(str)==set.end()){
-                            set.insert(str);
-                            // cout<<str<<endl;
-                        }
-                        sind++;
-                    }
-                }
-            }
-            if(vec.size()>=3){
-                string str="";
-                str.push_back(ch);str.push_back(ch);str.push_back(ch);
-                set.insert(str);
+        for(int i=0;i<s.size();i++){
+            int ind=s[i]-'a';
+            if(first[ind]==-1){
+                first[ind]=i;
             }
         }
-        return set.size();
+
+        for(int j=n-1;j>=0;j--){
+            int ind=s[j]-'a';
+            if(last[ind]==-1){
+                last[ind]=j;
+            }
+        }
+
+        int cnt=0;
+
+        for(int i=0;i<26;i++){
+           if(first[i]!=-1 && last[i]!=-1){
+               int sind=first[i]+1;
+               int eind=last[i]-1;
+               unordered_map<char,int>map;
+               while(sind<=eind){
+                   map[s[sind]]++;
+                   sind++;
+               }
+               cnt+=map.size();
+           }
+        }
+
+        return cnt;
     }
 };
