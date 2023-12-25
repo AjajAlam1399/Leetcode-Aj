@@ -1,47 +1,51 @@
 class Solution {
 public:
-    int numDecodings(string s) {
-        int n=s.length();
-        vector<int>dp(n+1,0);
-        dp[n]=1;
-
-        for(int ind=n-1;ind>=0;ind--){
-            int ans=0;
-        for(int i=ind;i<s.size();i++){
-            if(valid(ind,i,s)){
-                ans+=dp[i+1];
-            }
-        }
-         dp[ind]= ans;
-        }
-
-        return dp[0];
+    int numDecodings(string str) {
+        int n=str.size();
+		    
+		    if(str[0]=='0'){
+		        return 0;
+		    }
+		
+		    for(int i=1;i<n;i++){
+		        if(str[i]=='0'){
+		            
+		            if(str[i-1]=='0'){
+		                return 0;
+		            }
+		        }
+		    }
+		   
+		    vector<int>dp(n+1,0);
+		    dp[n]=1;
+		  //   return fun(0,str,n,dp);
+		     
+		     for(int i=n-1;i>=0;i--){
+		         int cnt=0;
+    		    for(int j=i;j<n;j++){
+    		        if(valid(i,j,str)){
+    		           cnt=(cnt+dp[j+1]);
+    		        }
+    		    }
+    		    
+    		     dp[i]= cnt;
+		     }
+		     
+		     return dp[0];
     }
 
-    // int fun(int ind,string &s,vector<int>&dp){
-
-    //     if(ind==s.size()){
-    //         return 1;
-    //     }
-    //     if(dp[ind]!=-1)return dp[ind];
-    //     int ans=0;
-    //     for(int i=ind;i<s.size();i++){
-    //         if(valid(ind,i,s)){
-    //             ans+=fun(i+1,s,dp);
-    //         }
-    //     }
-    //     return dp[ind]= ans;
-    // }
-
-    bool valid(int i,int j,string s){
-        if(j-i+1>=3)return false;
-        if(s[i]=='0')return false;
-        if(j-i+1==2){
-            string st=s.substr(i,j-i+1);
-            int num=stoi(st);
-            if(num>26)return false;
-            else return true;
-        }
-        return true;
-    }
+    bool valid(int i,int j,string &str){
+		    if(j-i+1>3){
+		        return false;
+		    }
+		    string st=str.substr(i,j-i+1);
+		    if(st[0]=='0'){
+		        return false;
+		    }
+		    int num=stoi(st);
+		    if(num>=1 && num<=26){
+		        return true;
+		    }
+		    return false;
+		}
 };
