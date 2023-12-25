@@ -2,24 +2,36 @@ class Solution {
 public:
     int numDecodings(string s) {
         int n=s.length();
-        vector<int>dp(n+1,-1);
-        return fun(0,s,dp);
-    }
+        vector<int>dp(n+1,0);
+        dp[n]=1;
 
-    int fun(int ind,string &s,vector<int>&dp){
-
-        if(ind==s.size()){
-            return 1;
-        }
-        if(dp[ind]!=-1)return dp[ind];
-        int ans=0;
+        for(int ind=n-1;ind>=0;ind--){
+            int ans=0;
         for(int i=ind;i<s.size();i++){
             if(valid(ind,i,s)){
-                ans+=fun(i+1,s,dp);
+                ans+=dp[i+1];
             }
         }
-        return dp[ind]= ans;
+         dp[ind]= ans;
+        }
+
+        return dp[0];
     }
+
+    // int fun(int ind,string &s,vector<int>&dp){
+
+    //     if(ind==s.size()){
+    //         return 1;
+    //     }
+    //     if(dp[ind]!=-1)return dp[ind];
+    //     int ans=0;
+    //     for(int i=ind;i<s.size();i++){
+    //         if(valid(ind,i,s)){
+    //             ans+=fun(i+1,s,dp);
+    //         }
+    //     }
+    //     return dp[ind]= ans;
+    // }
 
     bool valid(int i,int j,string s){
         if(j-i+1>=3)return false;
