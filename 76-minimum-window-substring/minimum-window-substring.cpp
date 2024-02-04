@@ -39,17 +39,11 @@ public:
                 }
 
                 if(map1.find(S[j])!=map1.end()){
-                    if(map2[S[j]]>map1[S[j]]){
-                        erase(S[j],map2);
-                    }
-                    else{
+                    if(map2[S[j]]<=map1[S[j]]){
                         cnt--;
-                         erase(S[j],map2);
                     }
                 }
-                else{
-                     erase(S[j],map2);
-                }
+                erase(S[j],map2);
                 if(cnt<n1){
                     break;
                 }
