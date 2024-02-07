@@ -19,6 +19,7 @@ public:
       string ans="";
       for(int i=0;i<256;i++){
         //   cout<<vec[i].first<<" "<<vec[i].second<<endl;
+        if(vec[i].first==0)break;
           if(vec[i].first!=0){
               string st="";
               for(int j=1;j<=vec[i].first;j++){
