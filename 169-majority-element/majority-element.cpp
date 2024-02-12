@@ -16,15 +16,6 @@ public:
                 cnt--;
             }
         }
-        cnt=0;
-        for(int i=0;i<nums.size();i++){
-            if(nums[i]==num){
-                cnt++;
-            }
-            if(cnt>nums.size()/2){
-                break;
-            }
-        }
         return num;
     }
 };
