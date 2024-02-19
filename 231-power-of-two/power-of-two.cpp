@@ -1,10 +1,9 @@
 class Solution {
 public:
     bool isPowerOfTwo(long long n) {
-        if(n==0){
+        if(n==0 || n<0){
             return false;
         }
-        long long x=n;
-        return (x&(x-1))==0;
+        return (n&(n-1))==0;
     }
 };
