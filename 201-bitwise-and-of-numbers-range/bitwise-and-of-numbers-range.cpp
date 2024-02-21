@@ -3,7 +3,6 @@ class Solution {
         int val=1<<pos;
         val=~val;
         int ans=(num&val);
-        // cout<<ans<<endl;
         return ans;
     }
 public:
