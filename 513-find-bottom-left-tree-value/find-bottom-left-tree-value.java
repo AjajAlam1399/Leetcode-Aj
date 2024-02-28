@@ -18,12 +18,12 @@ class Solution {
         Queue<TreeNode>q=new LinkedList<>();
         q.offer(root);
         int lastvalue=0;
-
+        TreeNode node=null;
         while(!q.isEmpty()){
             lastvalue=q.peek().val;
             int size=q.size();
             for(int i=0;i<size;i++){
-                TreeNode node=q.peek();
+                 node=q.peek();
                 q.poll();
                 if(node.left!=null){
                     q.offer(node.left);
