@@ -10,13 +10,6 @@ class Solution {
                 set.add(nums2[i]);
             }
         }
-        int n=set.size();
-        int ans[]=new int[n];
-        int i=0;
-        for(int val:set){
-            ans[i]=val;
-            i++;
-        } 
-        return ans;
+        return set.stream().mapToInt(x->x).toArray();
     }
 }
