@@ -1,34 +1,33 @@
-
 class Solution {
+    int mod=1e9+7;
 public:
     int kConcatenationMaxSum(vector<int>& arr, int k) {
-        long long m = 0, c = 0, MOD = 1e9+7;
-        for(int i = 0; i < arr.size(); i++) {
-            c += arr[i];
-            m = max(m, c);
-            if(c < 0) {
-                c = 0;
-            }
+        if(k==1){
+            int ans=fun(arr,1);
+            return max(0,ans)%mod;
         }
-        if(k == 1) {
-            return m % MOD;
-        } else {
-            
-            m = 0, c = 0;
-            for(int i = 0; i < 2*arr.size(); i++) {
-                c += arr[i%arr.size()];
-                m = max(m, c);
-                if(c < 0) {
-                    c = 0;
-                }
-            }
-           long long sum = 0;
-        for (auto& num : arr) {
-            sum += num;
+        long long sum=0;
+        for(int i=0;i<arr.size();i++){
+            sum+=arr[i];
+            sum%=mod;
         }
-        long long o = m + ((k - 2) * sum);
-        return (sum < 0) ? m % MOD : o % MOD;
+        long long ans=fun(arr,2);
+        return sum>0?(ans%mod+((k-2)*sum)%mod)%mod:ans%mod;
+    }
 
+    int fun(vector<int>&arr,int k){
+        int n=arr.size();
+        long long sum=0;
+        long long  maxval=0;
+        for(int i=0;i<n*k;i++){
+            sum+=arr[i%n];
+            if(sum>maxval){
+                maxval=sum;
+            }
+            if(sum<0){
+                sum=0;
+            }
         }
+        return maxval;
     }
 };
