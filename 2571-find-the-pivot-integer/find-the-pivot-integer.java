@@ -9,6 +9,9 @@ class Solution {
             if(sum==sum2){
                 return i;
             }
+            if(sum>sum2){
+                break;
+            }
         }
         return -1;
     }
