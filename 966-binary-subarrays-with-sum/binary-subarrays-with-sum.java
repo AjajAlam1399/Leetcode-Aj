@@ -11,10 +11,7 @@ class Solution {
             if(map.containsKey(sum-goal)){
                 ans+=map.get(sum-goal);
             }
-            if(map.containsKey(sum)){
-                map.put(sum,map.get(sum)+1);
-            }
-            else{
+            if(map.computeIfPresent(sum,(key,prev)->prev+1)==null){
                 map.put(sum,1);
             }
         }
