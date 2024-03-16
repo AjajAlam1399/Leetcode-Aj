@@ -4,22 +4,19 @@ class Solution {
     public int minSessions(int[] tasks, int sessionTime) {
         workSession = sessionTime;
         int n=tasks.length;
-        int[][][]dp=new int[n+2][sessionTime+1][1<<n+1];
-        for(int i=0;i<n+2;i++){
-            for(int j=0;j<=sessionTime;j++){
-
-            Arrays.fill(dp[i][j],-1);
-            }
+        int[][]dp=new int[sessionTime+1][1<<n+1];
+        for(int i=0;i<=sessionTime;i++){
+            Arrays.fill(dp[i],-1);
         }
         return 1+fun(-1,0,0,sessionTime,tasks,dp);
     }
 
-    int fun(int ind,int level,int mask,int sessionTime,int[] tasks,int[][][]dp){
+    int fun(int ind,int level,int mask,int sessionTime,int[] tasks,int[][]dp){
         if(level==tasks.length){
             return 0;
         }
-        if(dp[ind+1][sessionTime][mask]!=-1){
-            return dp[ind+1][sessionTime][mask];
+        if(dp[sessionTime][mask]!=-1){
+            return dp[sessionTime][mask];
         }
         int ans=tasks.length;
         for(int i=0;i<tasks.length;i++){
@@ -33,6 +30,6 @@ class Solution {
                 ans=Math.min(ans,1+fun(i,level+1,(mask|1<<i),workSession-tasks[i],tasks,dp));
             }
         }
-        return dp[ind+1][sessionTime][mask]=ans;
+        return dp[sessionTime][mask]=ans;
     }
 }
