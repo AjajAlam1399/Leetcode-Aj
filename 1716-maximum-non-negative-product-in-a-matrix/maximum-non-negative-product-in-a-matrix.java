@@ -1,26 +1,32 @@
 class Solution {
-    int mod = 1000000000+7;
-    long ans=-1;
+    int mod=1000000000+7;
     public int maxProductPath(int[][] grid) {
-        fun(0,0,grid[0][0],grid);
-        return ans<0?-1:(int)(ans%mod);
-    }
+        
+        int n=grid.length;
+        int m=grid[0].length;
+        long [][][]dp= new long[n][m][2];
+        dp[0][0][0]=(long)grid[0][0];
+        dp[0][0][1]=(long)grid[0][0];
+        for(int i=1;i<m;i++){
+            dp[0][i][0]=(long)grid[0][i]*dp[0][i-1][0];
+            dp[0][i][1]=(long)grid[0][i]*dp[0][i-1][1];
+        }
+        for(int i=1;i<n;i++){
+            dp[i][0][0]=(long)grid[i][0]*dp[i-1][0][0];
+            dp[i][0][1]=(long)grid[i][0]*dp[i-1][0][1];
+        }
+        long ans=-1;
+        for(int i=1;i<n;i++){
+            for(int j=1;j<m;j++){
+                long min=(long)grid[i][j]*Math.min(dp[i-1][j][0],dp[i][j-1][0]);
+                long max=(long)grid[i][j]*Math.max(dp[i-1][j][1],dp[i][j-1][1]);
+                dp[i][j][0]=Math.min(min,max);
+                dp[i][j][1]=Math.max(min,max);
+            }
+        }
 
-    void fun(int i,int j,long currans,int [][] grid){
-        if(i==grid.length-1 && j==grid[0].length-1){
-            ans=Math.max(ans,currans);
-            return;
-        }
-        if(grid[i][j]==0){
-            ans=Math.max(ans,0);
-            return;
-        }
-        if(i+1<grid.length){
-            fun(i+1,j,currans*grid[i+1][j],grid);
-        }
-        if(j+1<grid[0].length){
-        fun(i,j+1,currans*grid[i][j+1],grid);
-        }
-        return;
+        ans=dp[n-1][m-1][1];
+        return ans<0?-1:(int)(ans%mod);
+
     }
 }
