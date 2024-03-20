@@ -29,7 +29,7 @@ class Solution {
             temp=temp.next;
             cnt1++;
             cnt2++;
-            if(cnt1<a){
+            if(cnt1==a-1){
                 ans[0]=temp;
             }
             
