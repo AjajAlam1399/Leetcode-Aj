@@ -20,7 +20,7 @@ class Solution {
         h1.next=list2;
         return list1;
     }
-    ListNode findNode( ListNode head,int a){
+    ListNode findNode(ListNode head,int a){
         ListNode temp=head;
         int cnt=0;
         while(cnt<a){
