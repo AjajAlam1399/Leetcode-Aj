@@ -26,7 +26,6 @@ public:
         }
         if(!root->left && !root->right){
             subans.push_back('a'+root->val);
-            // cout<<ans<<" "<<subans<<endl;
             if(ans.size()==0){
                 ans=subans;
             }
@@ -34,9 +33,7 @@ public:
                 int i=ans.size()-1;
                 int j=subans.size()-1;
                 bool flag=false;
-                // cout<<ans<<" "<<subans<<endl;
                 while(i>=0 && j>=0){
-                    // cout<<i<<" "<<j<<endl;
                     if(ans[i]>subans[j]){
                         ans=subans;
                         flag=true;
@@ -44,7 +41,6 @@ public:
                     }
                     else if(ans[i]<subans[j]){
                         flag=true;
-                        // cout<<"hi"<<endl;
                         break;
                     }
 
