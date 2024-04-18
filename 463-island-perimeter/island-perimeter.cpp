@@ -5,14 +5,17 @@ public:
         int col=grid[0].size();
         vector<vector<bool>>visted(row,vector<bool>(col,false));
         queue<pair<int,int>>q;
-
+        bool flag=false;
         for(int i=0;i<row;i++){
             for(int j=0;j<col;j++){
                 if(grid[i][j]==1){
                     q.push({i,j});
+                    flag=true;
                     break;
+
                 }
             }
+            if(flag)break;
         }
         int ans=0;
 
