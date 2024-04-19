@@ -2,11 +2,13 @@ class DisJointSet{
     private:
     vector<int>parent;
     vector<int>size;
+    vector<int>rank;
 
     public:
     DisJointSet(int v){
         parent.resize(v);
         size.resize(v);
+        rank.resize(v);
         for(int i=0;i<v;i++)parent[i]=i;
     }
     int findParent(int v){
@@ -31,9 +33,22 @@ class DisJointSet{
             size[rootx]+=size[rooty];
         }
     }
-    // int findSize(int ind){
-    //     return size[];
-    // }
+    void groupByRank(int x,int y){
+        int rootx=findParent(x);
+        int rooty=findParent(y);
+         if(rootx==rooty){
+            return ;
+        }
+        if(rank[rootx]<rank[rooty]){
+            parent[rootx]=rooty;
+        }
+        else{
+            parent[rooty]=rootx;
+            if(rank[rootx]==rank[rooty]){
+                rank[rootx]++;
+            }
+        }
+    }
 
 };
 
@@ -56,7 +71,7 @@ public:
                         if(newi>=0 && newj>=0 && newi<row && newj<col && grid[newi][newj]=='1'){
                             int ind1=col*i+j;
                             int ind2=col*newi+newj;
-                            ds.groupBySize(ind1,ind2);
+                            ds.groupByRank(ind1,ind2);
                         }
                     }
                 }
