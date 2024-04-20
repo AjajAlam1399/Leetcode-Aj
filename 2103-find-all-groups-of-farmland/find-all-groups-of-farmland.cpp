@@ -6,7 +6,7 @@ public:
 
         vector<vector<int>>ans;
         queue<pair<int,int>>q;
-        // vector<vector<bool>>visted(n,vector<bool>(m,false));
+       
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
                 if(land[i][j]==1){
