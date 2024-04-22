@@ -25,8 +25,9 @@ public:
         }
         if(set.find("0000")!=set.end())return -1;
         queue<string>q;
-        unordered_set<string>processed;
+        // unordered_set<string>processed;
         q.push({"0000"});
+        set.insert("0000");
         int level=0;
 
         while(!q.empty()){
@@ -37,10 +38,10 @@ public:
                 if(node==target){
                     return level;
                 }
-                if(processed.find(node)!=processed.end()){
-                    continue;
-                }
-                processed.insert(node);
+                // if(processed.find(node)!=processed.end()){
+                //     continue;
+                // }
+                // processed.insert(node);
                 for(int i=0;i<4;i++){
                     string newstr=node;
                     for(auto adj:graph[node[i]-'0']){
