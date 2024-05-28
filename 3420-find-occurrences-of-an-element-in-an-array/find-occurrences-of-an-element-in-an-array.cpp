@@ -5,11 +5,13 @@ public:
         int n=nums.size();
 
         for(int i=0;i<n;i++){
+           if(nums[i]==x){
             vec[nums[i]].push_back(i);
+           }
         }
 
         vector<int>ans;
-        
+
             auto it=vec[x];
 
         for(int i=0;i<queries.size();i++){
