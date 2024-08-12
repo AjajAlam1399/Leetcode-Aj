@@ -1,28 +1,35 @@
 class KthLargest {
-    multiset<int>heap;
+    priority_queue<int,vector<int>,greater<int>>heap;
     int kth;
 
 public:
     KthLargest(int k, vector<int>& nums) {
         this->kth = k;
         for (int i = 0; i < nums.size(); i++) {
-            heap.insert(nums[i]);
+            if(heap.size()<kth){
+                heap.push(nums[i]);
+            }
+            else{
+                if(heap.top()<nums[i]){
+                    heap.pop();
+                    heap.push(nums[i]);
+                }
+            }
         }
     }
 
     int add(int val) {
-        heap.insert(val);
-        int k=0;
-        int ans=0;
-        for(auto it=heap.rbegin();it!=heap.rend();++it){
-            k++;
-            if(k==kth){
-                ans=*it;
-                break;
+        if(heap.size()<kth){
+                heap.push(val);
             }
-        }
+            else{
+                if(heap.top()<val){
+                    heap.pop();
+                    heap.push(val);
+                }
+            }
 
-        return ans;
+        return heap.top();
     }
 };
 
