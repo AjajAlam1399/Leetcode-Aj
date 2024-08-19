@@ -2,8 +2,7 @@ class Solution {
 public:
     int smallestValue(int n) {
         int ans = 0;
-        unordered_set<int>set;
-        set.insert(n);
+        int prev=n;
         while (true) {
             int sum = 0;
             bool flag = false;
@@ -23,10 +22,8 @@ public:
             else{
                 curr=sum;
             }
-            if(set.find(curr)!=set.end())return curr;
-            else{
-                set.insert(curr);
-            }
+            if(prev==curr)return curr;
+            prev=curr;
             n=curr;
         }
         return ans;
