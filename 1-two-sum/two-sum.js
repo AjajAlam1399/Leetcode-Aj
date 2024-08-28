@@ -4,25 +4,13 @@
  * @return {number[]}
  */
 var twoSum = function (nums, target) {
-    let arr = nums.map((val, ind) => {
-        return { val, ind };
-    });
-    arr.sort((a, b) =>a.val - b.val);
-    let n = nums.length;
-    let i = 0;
-    let j = n - 1;
-    let ans = [];
-    while (i < j) {
-        let sum = arr[i].val + arr[j].val;
-        if (sum == target) {
-            return [arr[i].ind, arr[j].ind];
+    let map={};
+    for(let i=0;i<nums.length;i++){
+        let b=target-nums[i];
+        if(map.hasOwnProperty(b)){
+            return [map[b],i];
         }
-        else if (sum < target) {
-            i++;
-        }
-        else {
-            j--;
-        }
+        map[nums[i]]=i;
     }
-    return ans;
+    return [];
 };
