@@ -22,10 +22,7 @@ public:
 
         while(temp){
             int val=temp->val;
-            if(set.find(val)!=set.end()){
-
-            }
-            else{
+            if(set.find(val)==set.end()){
                 if(!newHead){
                     newHead=temp;
                     prev=temp;
