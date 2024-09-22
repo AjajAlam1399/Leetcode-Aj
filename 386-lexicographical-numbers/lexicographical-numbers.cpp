@@ -1,16 +1,23 @@
 class Solution {
-    static bool cmp(int a,int b){
-        string str1=to_string(a);
-        string str2=to_string(b);
-        return str1<str2;
-    }
 public:
     vector<int> lexicalOrder(int n) {
         vector<int>ans;
-        for(int i=1;i<=n;i++){
-            ans.push_back(i);
+        for(int i=1;i<=9;i++){
+            fun(i,n,ans);
         }
-        sort(ans.begin(),ans.end(),cmp);
         return ans;
+    }
+
+    void fun(int curr,int n,vector<int>&ans){
+
+        if(curr>n){
+            return ;
+        }
+        if(curr<=n){
+            ans.push_back(curr);
+        }
+        for(int i=0;i<=9;i++){
+            fun(curr*10+i,n,ans);
+        }
     }
 };
