@@ -1,30 +1,18 @@
 class Solution {
-    int mod=1e9+7;
-    using ll=long long;
-
 public:
     int numTrees(int n) {
-        
-        //code here
-        vector<vector<ll>>dp(n+1,vector<ll>(n+1,0));
-        for(int s=n;s>=0;s--){
-            for(int e=n;e>=0;e--){
-                if(s+e==2*n){
-                    dp[s][e]=1;
-                }
-                else{
-                    long long cnt=0;
-                    if(s<n){
-                        cnt+=dp[s+1][e];
-                    }
-                    if(e<s){
-                        cnt+=dp[s][e+1];
-                    }
-                    dp[s][e]=cnt;
-                }
-            }
-        }
-        return (int)dp[0][0];
+        vector<int>dp(n+1,0);
+        dp[0]=1;
 
+        for(int i=1;i<=n;i++){
+            int sum=0;
+            for(int j=1;j<=i;j++){
+                int left=i-j;
+                int right=i-left-1;
+                sum+=dp[left]*dp[right];
+            }
+            dp[i]=sum;
+        }
+        return dp[n];
     }
 };
