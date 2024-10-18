@@ -9,16 +9,18 @@ public:
             maxOr|=nums[i];
         }
         ll ans=0;
-        fun(0,0,maxOr,nums,ans);
-        return ans;
+        vector<vector<ll>>dp(n+1,vector<ll>(maxOr+1,-1));
+       return  fun(0,0,maxOr,nums,dp);
     }
 
-    void fun(int ind,int currOr,ll &maxOr,vector<int>& nums,ll &ans){
+    ll fun(int ind,int currOr,ll &maxOr,vector<int>& nums,vector<vector<ll>>&dp){
         if(ind==nums.size()){
-            ans+=currOr==maxOr;
-            return ;
+            return currOr==maxOr;
         }
-        fun(ind+1,currOr,maxOr,nums,ans);
-        fun(ind+1,currOr|nums[ind],maxOr,nums,ans);
+        if(dp[ind][currOr]!=-1)return dp[ind][currOr];
+        ll taken=fun(ind+1,currOr,maxOr,nums,dp);
+        ll not_taken=fun(ind+1,currOr|nums[ind],maxOr,nums,dp);
+
+        return dp[ind][currOr]=taken+not_taken;
     }
 };
