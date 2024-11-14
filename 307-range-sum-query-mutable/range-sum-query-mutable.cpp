@@ -1,57 +1,47 @@
 class NumArray {
-    vector<int>segTree;
-    int high;    
-    private: 
-    void build (int l,int r,int ind,vector<int>&nums){
-        if(l==r){
-            segTree[ind]=nums[l];
-            return ;
-        }
-        int mid=(l+r)>>1;
-        build(l,mid,2*ind+1,nums);
-        build(mid+1,r,2*ind+2,nums);
-        segTree[ind]=segTree[2*ind+1]+segTree[2*ind+2];
-    }
-
-    int query(int l,int r,int ind,int lind,int rind){
-        if(l>=lind && r<=rind)return segTree[ind];
-        if(l>rind || r<lind)return 0;
-        int mid=(l+r)>>1;
-        int left=query(l,mid,2*ind+1,lind,rind);
-        int right=query(mid+1,r,2*ind+2,lind,rind);
-        return left+right;
-    }
-
-    void pointUpdate(int l,int r,int ind,int node,int val){
-        if(l==r){
-            segTree[ind]=val;
-            return ;
-        }
-        int mid=(l+r)>>1;
-        if(node>=l && node<=mid){
-            pointUpdate(l,mid,2*ind+1,node,val);
-        }
-        else{
-            pointUpdate(mid+1,r,2*ind+2,node,val);
-        }
-        segTree[ind]=segTree[2*ind+1]+segTree[2*ind+2];
-    }
+    vector<int>blockArr;
+    vector<int>arr;
+    int block_size;
 public:
     NumArray(vector<int>& nums) {
         int n=nums.size();
-        this->high=n;
-        segTree.resize(4*n+1);
-        build(0,n-1,0,nums);
+        block_size=ceil(sqrt(n));
+        blockArr.resize(block_size);
+        arr.resize(n);
+        int block_indx=-1;
+        for(int i=0;i<n;i++){
+            arr[i]=nums[i];
+            if(i%block_size==0){
+                block_indx++;
+            }
+            blockArr[block_indx]+=arr[i];
+
+        }
     }
     
     void update(int index, int val) {
-        int r=high;
-        pointUpdate(0,r-1,0,index,val);
+        int ind=index/block_size;
+        blockArr[ind]+=val-arr[index];
+        arr[index]=val;
     }
     
     int sumRange(int left, int right) {
-         int r=high;
-        return query(0,r-1,0,left,right);
+        int sum=0;
+
+        while(left<right && left%block_size!=0 && left!=0){
+            sum+=arr[left];
+            left++;
+        }
+        while(left+block_size-1<=right){
+            sum+=blockArr[left/block_size];
+            left+=block_size;
+        }
+        while(left<=right){
+            sum+=arr[left];
+            left++;
+        }
+
+        return sum;
     }
 };
 
