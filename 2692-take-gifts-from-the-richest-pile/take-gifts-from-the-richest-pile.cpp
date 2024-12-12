@@ -9,7 +9,12 @@ public:
        while(!pq.empty() && k){
         auto it =pq.top();
         pq.pop();
-        pq.push(sqrt(it));
+        int num=sqrt(it);
+        
+        if(num>0){
+            pq.push(num);
+        }
+
         k--;
        }
        long long ans=0;
