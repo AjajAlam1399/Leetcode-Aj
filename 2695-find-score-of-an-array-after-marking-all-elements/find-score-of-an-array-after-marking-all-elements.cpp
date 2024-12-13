@@ -1,11 +1,11 @@
 class Solution {
-    using vec=vector<int>;
+    using vec=pair<int,int>;
 public:
     long long findScore(vector<int>& nums) {
         priority_queue<vec,vector<vec>,greater<vec>>pq;
 
         for(int i=0;i<nums.size();i++){
-            pq.push({nums[i],i,i-1,i+1});
+            pq.push({nums[i],i});
         }
 
         long long ans=0;
@@ -14,11 +14,9 @@ public:
         while(!pq.empty()){
             auto it =pq.top();
             pq.pop();
-            if(marked.find(it[1])==marked.end()){
-                ans+=it[0];
-                marked.insert(it[1]);
-                marked.insert(it[2]);
-                marked.insert(it[3]);
+            if(marked.find(it.second+1)==marked.end() && marked.find(it.second-1)==marked.end()){
+                ans+=it.first;
+                marked.insert(it.second);
             }
         }
         return ans;
