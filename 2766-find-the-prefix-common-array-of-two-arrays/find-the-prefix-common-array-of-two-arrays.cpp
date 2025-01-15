@@ -1,23 +1,25 @@
 class Solution {
+    using ll=long long;
 public:
     vector<int> findThePrefixCommonArray(vector<int>& A, vector<int>& B) {
         vector<int>vec;
-        unordered_map<int,int>map;
+        long long bitmask=0;
         int cnt=0;
 
         for(int i=0;i<A.size();i++){
-            if(map.find(A[i])!=map.end()){
-                cnt++;
-            }
+            ll ind=(ll)A[i];
+            ll shift=(ll)pow(2,ind);
+            ll bit=bitmask&shift;
+            if(bit)cnt++;
             else{
-                map[A[i]]++;
+                bitmask|=shift;
             }
-
-            if(map.find(B[i])!=map.end()){
-                cnt++;
-            }
+            ind=B[i];
+            shift=(ll)pow(2,ind);
+            bit=bitmask&shift;
+            if(bit)cnt++;
             else{
-                map[B[i]]++;
+                bitmask|=shift;
             }
             vec.push_back(cnt);
         }
