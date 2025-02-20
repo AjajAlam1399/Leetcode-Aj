@@ -1,46 +1,32 @@
 class Solution {
 public:
     string findDifferentBinaryString(vector<string>& nums) {
-        
+        unordered_map<string,int>map;
         int n=nums.size();
-        int m=nums[0].size();
-        unordered_set<int>set;
-
+        string str="";
         for(int i=0;i<n;i++){
-            int num=0;
-            for(int j=m-1;j>=0;j--){
-                if(nums[i][j]=='1'){
-                    int ind=m-1-j;
-                    num=(num|(1<<ind));
-                }
-            }
-            cout<<num<<endl;
-            set.insert(num);
+            map[nums[i]]++;
+            str.push_back('0');
         }
-        int cnt=0;
-
-        while(true){
-            if(set.find(cnt)==set.end()){
-                break;
-            }
-            cnt++;
-        }
-        string ans="";
-        for(int i=16;i>=0;i--){
-            int bit=(cnt&(1<<i));
-            if(bit){
-                ans+='1';
-            }
-            else{
-                ans+='0';
-            }
-        }
-        if(ans.size()>n){
-            int len=ans.size()-n;
-            ans=ans.substr(len);
-        }
-
+        cout<<str<<endl;
+        string ans;
+        fun(0,str,ans,map);
         return ans;
+    }
 
+    bool fun(int ind,string str,string &ans,unordered_map<string,int>&map){
+        if(map.find(str)==map.end()){
+            ans=str;
+            return true;
+        }
+        if(ind==str.size()){
+            return false;
+        }
+        str[ind]='1';
+        if(fun(ind+1,str,ans,map)){
+            return true;
+        }
+        str[ind]='0';
+        return false;
     }
 };
