@@ -7,7 +7,6 @@ public:
             bool flag=isPrime(i);
 
             if(flag){
-                cout<<i<<endl;
                 if(num1==-1){
                     num1=i;
                 }
