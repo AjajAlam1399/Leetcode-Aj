@@ -30,7 +30,6 @@ public:
             }
         }
 
-
         for(int i=0;i<n;i++){
             if(diffrent.find(words[i])!=diffrent.end()){
                 char ch1=words[i][0],ch2=words[i][1];
