@@ -1,9 +1,9 @@
 class Solution {
-
+    int N;
     vector<int>bit;
     void update(int idx,int val){
         
-        while(idx<52){
+        while(idx<N){
             bit[idx]+=val;
             idx+=idx&(-idx);
         }
@@ -12,8 +12,8 @@ class Solution {
     int query(int x){
         int currsum=0,currind=0;
 
-        for(int i=log2(52);i>=0;i--){
-            if(currind+(1<<i)<52 && currsum+bit[currind+(1<<i)]<x){
+        for(int i=log2(N);i>=0;i--){
+            if(currind+(1<<i)<N && currsum+bit[currind+(1<<i)]<x){
                 currind+=(1<<i);
                 currsum+=bit[currind];
             }
@@ -23,7 +23,8 @@ class Solution {
     }
 public:
     Solution(){
-        bit.resize(52,0);
+        this->N=52;
+        bit.resize(N,0);
     }
     vector<int> getSubarrayBeauty(vector<int>& nums, int k, int x) {
         
