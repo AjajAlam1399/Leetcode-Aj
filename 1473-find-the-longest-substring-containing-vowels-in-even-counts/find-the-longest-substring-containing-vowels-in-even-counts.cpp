@@ -2,32 +2,30 @@ class Solution {
 public:
     int findTheLongestSubstring(string s) {
         int n=s.size();
-        unordered_map<int,int>map;
-        map[0]=-1;
-        int mask=0;
+        vector<int>dp(1<<6,n+1);
+
+        dp[0]=-1;
+
         int ans=0;
-        for(int i=0;i<n;i++){
+        int curr=0;
+        for(int i=0;i<s.size();i++){
             if(s[i]=='a'){
-                mask^=1;
+                curr^=(1<<0);
             }
             else if(s[i]=='e'){
-                mask^=2;
+                curr^=(1<<1);
             }
             else if(s[i]=='i'){
-                mask^=4;
+                curr^=(1<<2);
             }
             else if(s[i]=='o'){
-                mask^=8;
+                curr^=(1<<3);
             }
             else if(s[i]=='u'){
-                mask^=16;
+                curr^=(1<<4);
             }
-            if(map.find(mask)!=map.end()){
-                ans=max(ans,i-map[mask]);
-            }
-            else{
-                map[mask]=i;
-            }
+            ans=max(ans,i-dp[curr]);
+            dp[curr]=min(dp[curr],i);
         }
         return ans;
     }
