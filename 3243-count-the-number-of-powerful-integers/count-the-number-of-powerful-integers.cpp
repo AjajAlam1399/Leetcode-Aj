@@ -11,19 +11,19 @@ public:
 
         ll h = 0, l = 0;
 
-        // Count numbers from 0 to finish that end with 's' and prefix digits <= limit
+
         memset(dp, -1, sizeof(dp));
         if ((int)str2.size() > suff) {
             h = count(str2, limit, suff, s);
         }
 
-        // Count numbers from 0 to (start - 1) that end with 's' and prefix digits <= limit
+
         memset(dp, -1, sizeof(dp));
         if ((int)str1.size() > suff) {
             l = count(str1, limit, suff, s);
         }
 
-        // Handle if the number exactly equals suffix
+
         ll suffixNum = stoll(s);
         if (suffixNum >= start && suffixNum <= finish) {
             h++;
@@ -42,14 +42,14 @@ private:
         if (ind == n - suffLen) {
             if (!isValid) return 0;
 
-            // Construct full number
+
             string prefixStr = to_string(prefix);
             while ((int)prefixStr.size() < (n - suffLen)) {
                 prefixStr = "0" + prefixStr;
             }
             string fullStr = prefixStr + suffix;
 
-            // Check if full number is within bound
+
             return fullStr <= bound ? 1 : 0;
         }
 
