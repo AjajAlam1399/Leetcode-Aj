@@ -1,6 +1,6 @@
 class Solution {
     using ll = long long;
-    // dp[pos][tight][isValid]
+
     ll dp[16][2][2];
 
 public:
