@@ -1,11 +1,8 @@
 class Solution {
     int fun(int ind,int tar,vector<int>&A,vector<vector<int>>&dp){
         
-        if(ind==0){
-            if(tar==0 && A[0]==0) return 2;
-        if(tar==0 || A[ind]==tar) return 1;
-        
-        return 0;
+        if(ind<0){
+            return tar==0;
         }
         
         if(dp[ind][tar]!=-1){
