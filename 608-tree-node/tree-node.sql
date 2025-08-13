@@ -1,0 +1,12 @@
+WITH Q AS (
+    SELECT DISTINCT T1.ID
+    FROM Tree T1
+    JOIN Tree T2 ON T1.ID = T2.P_ID
+)
+SELECT id, 
+CASE 
+    WHEN P_ID IS NULL THEN 'Root'
+    WHEN ID IN (SELECT ID FROM Q) THEN 'Inner'
+    ELSE 'Leaf' 
+END AS type
+FROM Tree;
