@@ -1,0 +1,6 @@
+# Write your MySQL query statement below
+WITH Q AS (SELECT * , LAG(VISITED_ON,6) OVER() AS START_DATE FROM (SELECT VISITED_ON FROM CUSTOMER GROUP BY VISITED_ON ORDER BY VISITED_ON) C)
+
+
+
+SELECT visited_on, (SELECT sum(amount) FROM CUSTOMER C WHERE C.visited_on BETWEEN Q.START_DATE AND Q.visited_on) as amount , (SELECT ROUND(sum(amount)/7,2) FROM CUSTOMER C WHERE C.visited_on BETWEEN Q.START_DATE AND Q.visited_on) as average_amount  FROM Q WHERE START_DATE IS NOT NULL
