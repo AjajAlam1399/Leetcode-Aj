@@ -1,11 +1,27 @@
-# Write your MySQL query statement below
-WITH Q AS (SELECT MR.*,U.name as user_name, M.title as movie_name FROM MovieRating MR
-LEFT JOIN 
-Users U
-ON MR.user_id=U.user_id
-LEFT JOIN Movies M
-ON M.movie_id=MR.movie_id)
+WITH Q AS (
+    SELECT MR.*, U.name AS user_name, M.title AS movie_name
+    FROM MovieRating MR
+    LEFT JOIN Users U ON MR.user_id = U.user_id
+    LEFT JOIN Movies M ON M.movie_id = MR.movie_id
+)
 
-SELECT user_name as 'results' From (SELECT user_name ,count(user_id) as ratingCnt from Q group by user_id ORDER BY ratingCnt DESC, user_name ASC limit 1) Q1
+-- First subquery: user with most ratings
+SELECT results FROM (
+    SELECT user_name AS results
+    FROM Q
+    GROUP BY user_id
+    ORDER BY COUNT(user_id) DESC, user_name ASC
+    LIMIT 1
+) AS UserResult
+
 UNION ALL
-SELECT movie_name as 'results' FROM (SELECT movie_name,AVG(rating) as avg_rating FROM Q WHERE created_at like '2020-02-%'  group by movie_id  ORDER BY avg_rating DESC , movie_name asc Limit 1) Q2;
+
+-- Second subquery: movie with highest avg rating in Feb 2020
+SELECT results FROM (
+    SELECT movie_name AS results
+    FROM Q
+    WHERE created_at LIKE '2020-02-%'
+    GROUP BY movie_id
+    ORDER BY AVG(rating) DESC, movie_name ASC
+    LIMIT 1
+) AS MovieResult;
