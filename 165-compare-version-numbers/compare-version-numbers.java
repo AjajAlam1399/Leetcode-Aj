@@ -1,22 +1,30 @@
 class Solution {
-    public int compareVersion(String version1, String version2) {
-        int i=0,j=0,n1=version1.length(),n2=version2.length(),num1=0,num2=0;
+    public int compareVersion(String v1, String v2) {
+        int n1=v1.length();
+        int n2=v2.length();
+
+        int  i=0;
+        int j=0;
+
+        int curr1=0;
+        int curr2=0;
 
         while(i<n1 || j<n2){
-            while(i<n1 && version1.charAt(i)!='.'){
-                num1*=10;
-                num1+=version1.charAt(i)-'0';
+            while(i<n1 && v1.charAt(i)!='.' ){
+                curr1*=10;
+                curr1+=v1.charAt(i)-'0';
                 i++;
             }
-            while(j<n2 && version2.charAt(j)!='.'){
-                num2*=10;
-                num2+=version2.charAt(j)-'0';
+             while(j<n2 && v2.charAt(j)!='.' ){
+                curr2*=10;
+                curr2+=v2.charAt(j)-'0';
                 j++;
             }
-            if(num1<num2)return -1;
-            if(num1>num2)return 1;
-            num1=0;
-            num2=0;
+            // cout<<curr1<<"-"<<curr2<<endl;
+            if(curr1>curr2)return 1;
+            else if(curr1<curr2) return -1;
+            curr1=0;
+            curr2=0;
             i++;
             j++;
         }
