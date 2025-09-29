@@ -1,0 +1,4 @@
+# Write your MySQL query statement below
+WITH Q AS (SELECT P.*, E.name FROM EMPLOYEES E JOIN performance_reviews P USING (employee_id) )
+
+SELECT Q2.employee_id, Q2.name,(Q2.rating -Q2.prev2) as improvement_score FROM(SELECT * , lag(rating,1) over(partition by employee_id order by review_date) as prev1, lag(rating,2) over(partition by employee_id order by review_date) as prev2, row_number() over(partition by employee_id order by review_date) as ordered, count(*) over(partition by employee_id ) as count FROM Q order by employee_id ,review_date) Q2 WHERE Q2.prev1 is NOT NULL AND Q2.prev2 IS NOT NULL AND Q2.ordered=Q2.count AND Q2.PREV1>Q2.PREV2 AND Q2.RATING>Q2.PREV1 ORDER BY improvement_score DESC ,name ;
