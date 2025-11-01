@@ -11,13 +11,12 @@
 class Solution {
 public:
     ListNode* modifiedList(vector<int>& nums, ListNode* head) {
-        int n=nums.size();
         unordered_set<int>set;
-        for(int i=0;i<n;i++){
-            set.insert(nums[i]);
-        }
-        ListNode* newHead=NULL;
+
+        for(auto num : nums)set.insert(num);
+
         ListNode* temp=head;
+        ListNode* newHead=NULL;
         ListNode* prev=NULL;
 
         while(temp){
@@ -25,7 +24,7 @@ public:
             if(set.find(val)==set.end()){
                 if(!newHead){
                     newHead=temp;
-                    prev=temp;
+                    prev=newHead;
                 }
                 else{
                     prev->next=temp;
@@ -34,9 +33,11 @@ public:
             }
             temp=temp->next;
         }
+
         if(prev){
             prev->next=NULL;
         }
+
         return newHead;
     }
 };
