@@ -1,4 +1,7 @@
 class Solution {
+    int p=31;
+    int mod=1e9+7;
+    using ll=long long;
 public:
     int repeatedStringMatch(string a, string b) {
         string str=a;
@@ -14,48 +17,30 @@ public:
         return -1;
     }
 
-    bool fun(string str ,string pattern){
+    int fun(string a,string b){
 
-        int n=pattern.size();
-        vector<int>lps(n+1,0);
+        int n=a.size();
+        vector<ll>power(n);
+        power[0]=1;
 
-        int len=0,i=1;
-
-        while(i<n){
-
-            if(pattern[i]==pattern[len]){
-                len++;
-                lps[i++]=len;
-            }
-            else{
-                if(len==0){
-                    i++;
-                }
-                else{
-                    len=lps[len-1];
-                }
-            }
+        for(int i=1;i<n;i++){
+            power[i]=(power[i-1]*p)%mod;
         }
 
-        int j=0;
-        i=0;
-        int n1=str.size();
-        int n2=pattern.size();
+        vector<ll>hash(n+1,0);
 
-        while(i<n1){
-            if(str[i]==pattern[j]){
-                i++;
-                j++;
-            }
-            else{
-                if(j==0){
-                    i++;
-                }
-                else{
-                    j=lps[j-1];
-                }
-            }
-            if(j==n2){
+        for(int i=0;i<n;i++){
+            hash[i+1]=(hash[i]+(a[i]-'a'+1)*power[i])%mod;
+        }
+        int hashVal=0;
+
+        for(int i=0;i<b.size();i++){
+            hashVal=(hashVal+(b[i]-'a'+1)*power[i])%mod;
+        }
+
+        for(int i=0;i+b.size()-1<n;i++){
+            int val=(hash[i+b.size()]-hash[i]+mod)%mod;
+            if(val==(hashVal*power[i])%mod){
                 return true;
             }
         }
