@@ -1,35 +1,47 @@
 class Solution {
 public:
-    bool parseBoolExpr(string expression) {
+    bool parseBoolExpr(string exp) {
+
         stack<char> st;
 
-        for (char currChar : expression) {
-            if (currChar == ',' || currChar == '(')
-                continue;  
-            if (currChar == 't' || currChar == 'f' || currChar == '!' ||
-                currChar == '&' || currChar == '|') {
-                st.push(currChar);
-            }
-            else if (currChar == ')') {
-                bool hasTrue = false, hasFalse = false;
+        int n = exp.size();
 
-                while (st.top() != '!' && st.top() != '&' && st.top() != '|') {
-                    char topValue = st.top();
+        for (int i = 0; i < n; i++) {
+            if (exp[i] == 't' || exp[i] == 'f' || exp[i] == '(' ||
+                exp[i] == '&' || exp[i] == '!' || exp[i] == '|') {
+                    // cout<<exp[i]<<i<<endl;
+                st.push(exp[i]);
+            } else if (exp[i] == ')') {
+                int tcnt = 0;
+                int fcnt = 0;
+
+                while (!st.empty() && st.top() != '(') {
+                    char ch = st.top();
                     st.pop();
-                    if (topValue == 't') hasTrue = true;
-                    if (topValue == 'f') hasFalse = true;
+
+                    if (ch == 't')
+                        tcnt++;
+                    else
+                        fcnt++;
                 }
-                char op = st.top();
                 st.pop();
-                if (op == '!') {
-                    st.push(hasTrue ? 'f' : 't');
+
+                int op = st.top();
+                st.pop();
+                char ans;
+
+                if (op == '|') {
+                    ans = tcnt ? 't' : 'f';
                 } else if (op == '&') {
-                    st.push(hasFalse ? 'f' : 't');
+                    ans = fcnt != 0 ? 'f' : 't';
                 } else {
-                    st.push(hasTrue ? 't' : 'f');
+                    ans = tcnt ? 'f' : 't';
                 }
+
+                st.push(ans);
             }
         }
-        return st.top() == 't';
+
+        return st.top()=='t'?true:false;
     }
 };
