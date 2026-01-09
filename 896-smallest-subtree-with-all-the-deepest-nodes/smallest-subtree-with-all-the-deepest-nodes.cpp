@@ -15,37 +15,47 @@ public:
         
         queue<TreeNode*>q;
 
+        TreeNode* node1=root;
+        TreeNode* node2=root;
+
         q.push(root);
-        TreeNode* L=NULL;
-        TreeNode* R=NULL;
-
-
 
         while(!q.empty()){
             int size=q.size();
 
             for(int i=0;i<size;i++){
-                auto node=q.front();
+                TreeNode* node = q.front();
                 q.pop();
-                if(i==0)L=node;
-                if(i==size-1)R=node;
+                if(i==0){
+                    node1 = node;
+                }
+                if(i==size-1){
+                    node2=node;
+                }
 
-                if(node->left)q.push(node->left);
-                if(node->right)q.push(node->right);
+                if(node->left){
+                    q.push(node->left);
+                }
+                if(node->right){
+                    q.push(node->right);
+                }
             }
         }
 
-        return fun(root,L,R);
+        if(node1 == node2)return node1;
+
+        return lca(root , node1, node2);
     }
 
-    TreeNode* fun(TreeNode* root,TreeNode* l,TreeNode* r){
-        if(!root ||root==l || root==r)return root;
+    TreeNode* lca(TreeNode* root , TreeNode* node1, TreeNode* node2){
+        if(!root || root==node1 || root==node2)return root;
 
-        auto left=fun(root->left,l,r);
-        auto right=fun(root->right,l,r);
+        TreeNode* left = lca(root->left,node1,node2);
+        TreeNode* right = lca(root->right,node1,node2);
 
-        if(left && right)return root;
-        if(!left)return right;
-        return left;
+        if(left && right) return root;
+
+        if(left)return left;
+        return right;
     }
 };
