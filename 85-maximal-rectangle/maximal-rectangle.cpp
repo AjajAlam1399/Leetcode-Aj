@@ -1,54 +1,49 @@
 class Solution {
 public:
     int maximalRectangle(vector<vector<char>>& matrix) {
-        
-        int n=matrix.size();
-        int m=matrix[0].size();
 
-        vector<int>vec(m,0);
-
+        int n=matrix.size(),m=matrix[0].size();
         int ans=0;
 
         for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(matrix[i][j]=='1'){
-                    vec[j]+=1;
+            vector<int>vec(m,0);
+            for(int j=i;j<n;j++){
+                for(int k=0;k<m;k++){
+                    if(matrix[j][k]=='1'){
+                        vec[k]++;
+                    }
+                    else{
+                        vec[k]=0;
+                    }
                 }
-                else{
-                    vec[j]=0;
-                }
-            
+                ans=max(ans,fun(vec));
             }
-
-            int currAns=fun(vec);
-            ans=max(ans,currAns);
         }
 
         return ans;
+        
     }
 
     int fun(vector<int>&vec){
-        int ans=0;
 
         stack<int>st;
-        int n=vec.size();
+        int ans=0;
 
-        for(int i=0;i<=n;i++){
-
-            while(!st.empty() && (i==n || vec[st.top()]>=vec[i])){
-                int ind=st.top();
-                 int br=vec[ind];
+        for(int i=0;i<=vec.size();i++){
+            while(!st.empty() && (i==vec.size() || vec[i]<vec[st.top()])){
+                int len = vec[st.top()];
                 st.pop();
-                int len;
-
+                int w;
                 if(!st.empty()){
-                    len=i-st.top()-1;
+                    w=i-st.top()-1;
                 }
                 else{
-                    len=i;
+                    w=i;
                 }
-                ans=max(ans,br*len);
+                ans=max(ans,w*len);
+
             }
+
             st.push(i);
         }
 
