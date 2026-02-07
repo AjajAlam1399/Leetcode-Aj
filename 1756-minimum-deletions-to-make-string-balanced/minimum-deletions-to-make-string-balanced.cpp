@@ -1,21 +1,36 @@
 class Solution {
-    using ll=long long;
 public:
     int minimumDeletions(string s) {
-         int bcnt=0,acnt=0,n=s.size();
+        int n=s.size();
+        vector<int>b(n,0);
+        vector<int>a(n,0);
+        int cnt=0;
 
-         for(int i=0;i<n;i++){
-            if(s[i]=='a')acnt++;
-         }
+        for(int i=n-1;i>=0;i--){
+            if(s[i]=='b'){
+                cnt++;
+            }
+            b[i]=cnt;
+        }
+        int ans=n;
 
-        int ans=INT_MAX;
-         for(int i=0;i<n;i++){
-            if(s[i]=='a')acnt--;
-            ans=min(ans,bcnt+acnt);
-            if(s[i]=='b')bcnt++;
-         }
-         return ans;
+        cnt=0;
+        for(int i=0;i<n;i++){
+            if(s[i]=='a'){
+                cnt++;
+                ans=min(ans,n-cnt-b[i]);
+            }
+            a[i]=cnt;
+        }
+        cnt=0;
+        for(int i=n-1;i>=0;i--){
+            if(s[i]=='b'){
+                cnt++;
+                ans=min(ans,n-cnt-a[i]);
+            }
+        }
+
+        return ans;
     }
 
-    
 };
