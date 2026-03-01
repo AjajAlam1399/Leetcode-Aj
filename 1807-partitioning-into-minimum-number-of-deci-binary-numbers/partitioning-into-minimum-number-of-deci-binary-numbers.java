@@ -1,15 +1,12 @@
 class Solution {
-    public int minPartitions(String n) {
-        int size=n.length();
-        int maxd=n.charAt(0)-'0';
-        int ans=n.charAt(0)-'0';
+    public int minPartitions(String s) {
+        
+        int n = s.length();
+        int ans =0;
 
-        for(int i=1;i<size;i++){
-            int num=n.charAt(i)-'0';
-            if(num>maxd){
-                ans+=num-maxd;
-                maxd=num;
-            }
+        for(int i=0;i<n;i++){
+            int chNum = (int)s.charAt(i) - (int)'0';
+            ans =Math.max(ans,chNum);
         }
         return ans;
     }
