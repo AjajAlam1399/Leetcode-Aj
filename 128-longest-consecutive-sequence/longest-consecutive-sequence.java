@@ -3,18 +3,18 @@ class Solution {
         int ans=0;
         int n=nums.length;
 
-        Map<Integer,Integer> map = new HashMap<>();
+        Set<Integer> map = new HashSet<>();
 
         for(int i=0;i<n;i++){
-            map.put(nums[i],1);
+            map.add(nums[i]);
         }
 
         for(int i=0;i<n;i++){
-            if(map.containsKey(nums[i]-1))continue;
+            if(map.contains(nums[i]-1))continue;
             int currNum=nums[i];
             int currcnt=0;
 
-            while(map.containsKey(currNum)){
+            while(map.contains(currNum)){
                 currNum++;
                 currcnt++;
             }
