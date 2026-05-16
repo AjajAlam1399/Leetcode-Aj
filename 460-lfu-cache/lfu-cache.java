@@ -1,144 +1,126 @@
-import java.util.*;
-
 class LFUCache {
 
-    /* ---------------- NODE ---------------- */
     private class Node {
-        int key;
-        int val;
-        int freq;
-        Node prev, next;
+        public int key;
+        public int value;
+        public int currFreq;
+        public Node next;
+        public Node prev;
 
-        Node(int key, int val) {
+        public Node(int key, int value) {
             this.key = key;
-            this.val = val;
-            this.freq = 1;
+            this.value = value;
+            this.currFreq = 1;
+            this.next = null;
+            this.prev = null;
         }
-    }
+    };
 
-    /* ---------------- DOUBLY LIST ---------------- */
-    private class List {
-        int size;
-        Node head, tail;
+    private class ListNode {
+        public Node Head;
+        public Node Tail;
+        public int size;
 
-        List() {
-            head = new Node(-1, -1);
-            tail = new Node(-1, -1);
-            head.next = tail;
-            tail.prev = head;
-            size = 0;
-        }
-
-        void insertAtHead(Node node) {
-            Node next = head.next;
-
-            head.next = node;
-            node.prev = head;
-
-            node.next = next;
-            next.prev = node;
-
-            size++;
+        public ListNode() {
+            this.Head = new Node(-1, -1);
+            this.Tail = new Node(-1, -1);
+            this.Head.next = this.Tail;
+            this.Tail.prev = this.Head;
+            this.size = 0;
         }
 
-        void deleteNode(Node node) {
-            node.prev.next = node.next;
-            node.next.prev = node.prev;
-            size--;
+        public void insertAtHead(Node node) {
+            Node currHeadNext = Head.next;
+            Head.next = node;
+            node.prev = Head;
+            node.next = currHeadNext;
+            currHeadNext.prev = node;
+            this.size++;
         }
 
-        Node removeLRU() {
-            if (size == 0)
-                return null;
-            Node node = tail.prev;
+        public void deleteNode(Node node) {
+            Node currNodeNext = node.next;
+            Node currNodePrev = node.prev;
+            currNodeNext.prev = currNodePrev;
+            currNodePrev.next = currNodeNext;
+            this.size--;
+        }
+
+        public Node evictNode() {
+            Node node = Tail.prev;
             deleteNode(node);
             return node;
         }
-    }
 
-    /* ---------------- LFU STRUCTURE ---------------- */
+    };
 
-    Map<Integer, Node> nodeMap; // key -> node
-    Map<Integer, List> freqMap; // freq -> DLL
-
-    int capacity;
-    int minFreq;
+    private HashMap<Integer, Node> keyMap;
+    private HashMap<Integer, ListNode> freqMap;
+    private int minFreq;
+    private int capacity;
+    private int size;
 
     public LFUCache(int capacity) {
-        this.capacity = capacity;
-        nodeMap = new HashMap<>();
+        keyMap = new HashMap<>();
         freqMap = new HashMap<>();
-        minFreq = 0;
+        this.minFreq = 1;
+        this.capacity = capacity;
+        this.size = 0;
     }
-
-    /* ---------------- GET ---------------- */
 
     public int get(int key) {
-        Node node = nodeMap.get(key);
-        if (node == null)
+        if (!keyMap.containsKey(key)) {
             return -1;
-
+        }
+        Node node = keyMap.get(key);
         updateFrequency(node);
-        return node.val;
-    }
 
-    /* ---------------- PUT ---------------- */
+        return node.value;
+    }
 
     public void put(int key, int value) {
-
-        if (capacity == 0)
-            return;
-
-        // key already exists
-        if (nodeMap.containsKey(key)) {
-            Node node = nodeMap.get(key);
-            node.val = value;
+        if (keyMap.containsKey(key)) {
+            Node node = keyMap.get(key);
+            node.value = value;
             updateFrequency(node);
-            return;
-        }
-
-        // eviction required
-        if (nodeMap.size() == capacity) {
-            List minList = freqMap.get(minFreq);
-            Node lru = minList.removeLRU();
-            nodeMap.remove(lru.key);
-
-            if (minList.size == 0) {
-                freqMap.remove(minFreq);
+        } else {
+            if (Integer.compare(this.size, this.capacity) == 0) {
+                ListNode ln = freqMap.get(minFreq);
+                Node evictedNode = ln.evictNode();
+                keyMap.remove(evictedNode.key);
+                if (ln.size == 0) {
+                    freqMap.remove(minFreq);
+                }
+                this.size--;
             }
+            this.minFreq = 1;
+            Node node = new Node(key, value);
+            freqMap.putIfAbsent(minFreq, new ListNode());
+            freqMap.get(minFreq).insertAtHead(node);
+            keyMap.put(key, node);
+            this.size++;
         }
-
-        // insert new node
-        Node node = new Node(key, value);
-        nodeMap.put(key, node);
-
-        freqMap
-                .computeIfAbsent(1, k -> new List())
-                .insertAtHead(node);
-
-        minFreq = 1;
     }
-
-    /* ---------------- CORE LFU STEP ---------------- */
 
     private void updateFrequency(Node node) {
-
-        int freq = node.freq;
-        List oldList = freqMap.get(freq);
-
-        oldList.deleteNode(node);
-
-        if (oldList.size == 0) {
-            freqMap.remove(freq);
-            if (minFreq == freq) {
-                minFreq++;
+        int nodeFreq = node.currFreq;
+        ListNode ln = freqMap.get(nodeFreq);
+        ln.deleteNode(node);
+        if (ln.size == 0) {
+            freqMap.remove(nodeFreq);
+            if (Integer.compare(this.minFreq, nodeFreq) == 0) {
+                this.minFreq++;
             }
         }
-
-        node.freq++;
-
-        freqMap
-                .computeIfAbsent(node.freq, k -> new List())
-                .insertAtHead(node);
+        node.currFreq++;
+        freqMap.putIfAbsent(node.currFreq, new ListNode());
+        freqMap.get(node.currFreq).insertAtHead(node);
     }
 }
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
