@@ -1,12 +1,6 @@
-WITH Q AS (
-    SELECT DISTINCT T1.ID
-    FROM Tree T1
-    JOIN Tree T2 ON T1.ID = T2.P_ID
-)
-SELECT id, 
-CASE 
-    WHEN P_ID IS NULL THEN 'Root'
-    WHEN ID IN (SELECT ID FROM Q) THEN 'Inner'
-    ELSE 'Leaf' 
-END AS type
-FROM Tree;
+# Write your MySQL query statement below
+SELECT Q1.id , case 
+    when p_id is null then 'Root'
+    when NOT EXISTS (SELECT 1  from Tree Q2 where Q1.id=Q2.p_id) then 'Leaf'
+    else 'Inner'
+ end as type FROM Tree Q1;
