@@ -1,7 +1,2 @@
 # Write your MySQL query statement below
-SELECT product_id ,
-COALESCE(
-    (SELECT new_price FROM PRODUCTS P2 WHERE P1.product_id=p2.product_id AND 
-    P2.change_date<='2019-08-16' ORDER BY p2.change_date DESC Limit 1),10
-) as price
-FROM (SELECT DISTINCT(product_id )FROM Products) P1
+SELECT q1.product_id  as product_id , IFNULL((select new_price  from products q2 where q1.product_id=q2.product_id and q2.change_date<='2019-08-16' order by q2.change_date desc limit 1),10) as price from products q1 group by q1.product_id;
