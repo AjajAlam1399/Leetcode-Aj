@@ -1,47 +1,30 @@
 class Solution {
     public String shortestPalindrome(String s) {
+        int n = s.length();
+        if (n <= 1) return s;
 
-        StringBuilder str = new StringBuilder(s);
-        str.append('#');
-        for(int s_ind = s.length()-1;s_ind>=0 ;s_ind--){
-            str.append(s.charAt(s_ind));
-        }
-        
-        int str_len = str.length();
+        StringBuilder combined = new StringBuilder();
+        combined.append(s).append('#').append(new StringBuilder(s).reverse());
 
-        int lps_arr [] = new int [str_len];
-        Arrays.fill(lps_arr,0);
-        int len=0;
+        int m = combined.length();
+        int[] lps = new int[m];
 
-        int str_ind=1;
-
-        while(str_ind<str_len){
-
-            if(str.charAt(str_ind)==str.charAt(len)){
-                len++;
-                lps_arr[str_ind]=len;
-                str_ind++;
-            }
-            else{
-                if(len==0){
-                    str_ind++;
-                }
-                else{
-                    len = lps_arr[len-1];
-                }
+        for (int i = 1, len = 0; i < m; ) {
+            if (combined.charAt(i) == combined.charAt(len)) {
+                lps[i++] = ++len;
+            } else if (len > 0) {
+                len = lps[len - 1];
+            } else {
+                lps[i++] = 0;
             }
         }
 
-        StringBuilder ans = new StringBuilder();
-        int pref_len =s.length() -  lps_arr[str.length()-1];
-        for(int s_ind=s.length()-1;s_ind>=0 && pref_len>0 ; s_ind--,pref_len--){
-            ans.append(s.charAt(s_ind));
-        }
+        int longestPrefix = lps[m - 1];
 
-        for(int s_ind=0; s_ind<s.length() ; s_ind++){
-            ans.append(s.charAt(s_ind));
-        }
+        StringBuilder result = new StringBuilder();
+        result.append(new StringBuilder(s.substring(longestPrefix)).reverse());
+        result.append(s);
 
-        return ans.toString();
+        return result.toString();
     }
 }
