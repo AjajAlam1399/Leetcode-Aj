@@ -2,79 +2,85 @@ class LRUCache {
 
     class Node {
         public int key;
-        public int val;
-        public Node prev;
+        public int value;
         public Node next;
+        public Node prev;
 
-        public Node(int key , int val){
+        public Node(int key, int value) {
             this.key = key;
-            this.val=val;
-            this.prev = null;
+            this.value = value;
             this.next = null;
+            this.prev = null;
         }
     }
 
-    Node Head;
-    Node Tail;
-    Map<Integer, Node> map;
+    Node head;
+    Node tail;
     int capacity;
-    int size;
+    Map<Integer, Node> map = new HashMap<>();
 
     public LRUCache(int capacity) {
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
+
+        head.next = tail;
+        tail.prev = head;
+
         this.capacity = capacity;
-        Head = new Node(-1,-1);
-        Tail = new Node(-1,-1);
-        Head.next = Tail;
-        Tail.prev = Head;
-        map = new HashMap<>();
-        this.size = 0;
+    }
+
+    private void insertAtHead(Node node){
+        Node headNext=head.next;
+        head.next=node;
+        node.next=headNext;
+        node.prev=head;
+        headNext.prev=node;
+    }
+
+    private Node evictTail() {
+        Node evictNode = tail.prev;
+        Node evictPrevNode = evictNode.prev;
+        evictPrevNode.next = tail;
+        tail.prev = evictPrevNode;
+
+        return evictNode;
+    }
+
+    private void deleteNode(Node node) {
+        Node prevNode = node.prev;
+        Node nextNode = node.next;
+
+        prevNode.next = nextNode;
+        nextNode.prev = prevNode;
     }
 
     public int get(int key) {
         if (!map.containsKey(key)) {
             return -1;
         }
+
         Node node = map.get(key);
         deleteNode(node);
         insertAtHead(node);
-
-        return node.val;
+        return node.value;
     }
 
     public void put(int key, int value) {
+        Node node;
         if (map.containsKey(key)) {
-            Node node = map.get(key);
-            node.val = value;
+            node = map.get(key);
+            node.value = value;
             deleteNode(node);
             insertAtHead(node);
-            return ;
+        } else {
+            if (map.size() == capacity) {
+                node = evictTail();
+                map.remove(node.key);
+            }
+            node = new Node(key, value);
+            map.put(key, node);
+            insertAtHead(node);
         }
-        if(this.size == this.capacity){
-            Node node = Tail.prev;
-            deleteNode(node);
-            map.remove(node.key);
-            this.size--;
-        }
-        Node node = new Node(key, value);
-        map.put(key,node);
-        insertAtHead(node);
-        this.size++;
-    }
-
-    private void insertAtHead(Node node) {
-        Node currHeadNext = Head.next;
-        Head.next = node;
-        node.prev = Head;
-        node.next = currHeadNext;
-        currHeadNext.prev = node;
-    }
-
-    private void deleteNode(Node node) {
-        Node nodeNext = node.next;
-        Node nodeprev = node.prev;
-
-        nodeNext.prev = nodeprev;
-        nodeprev.next = nodeNext;
     }
 }
 
